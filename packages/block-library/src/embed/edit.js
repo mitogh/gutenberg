@@ -53,6 +53,7 @@ const EmbedEdit = ( props ) => {
 		setAttributes,
 		insertBlocksAfter,
 		onFocus,
+		clientId,
 	} = props;
 
 	const defaultEmbedInfo = {
@@ -192,8 +193,29 @@ const EmbedEdit = ( props ) => {
 		web: sprintf( __( '%s URL' ), title ),
 		native: title,
 	} );
+
+	const onSubmit = ( event ) => {
+		if ( event ) {
+			event.preventDefault();
+		}
+
+		setIsEditingURL( false );
+		setAttributes( { url } );
+	};
+
+	const onSubmitNative = ( value ) => {
+		// On native, the URL change is only notified when submitting,
+		// and not via 'onChange', so we have to explicitly set the URL.
+		setURL( value );
+
+		// Replicate the same behavior as onSubmit
+		setIsEditingURL( false );
+		setAttributes( { url: value } );
+	};
+
 	// No preview, or we can't embed the current URL, or we've clicked the edit button.
 	const showEmbedPlaceholder = ! preview || cannotEmbed || isEditingURL;
+
 	if ( showEmbedPlaceholder ) {
 		return (
 			<View { ...blockProps }>
@@ -201,14 +223,10 @@ const EmbedEdit = ( props ) => {
 					icon={ icon }
 					label={ label }
 					onFocus={ onFocus }
-					onSubmit={ ( event ) => {
-						if ( event ) {
-							event.preventDefault();
-						}
-
-						setIsEditingURL( false );
-						setAttributes( { url } );
-					} }
+					onSubmit={ Platform.select( {
+						web: onSubmit,
+						native: onSubmitNative,
+					} ) }
 					value={ url }
 					cannotEmbed={ cannotEmbed }
 					onChange={ ( event ) => setURL( event.target.value ) }
@@ -216,6 +234,7 @@ const EmbedEdit = ( props ) => {
 					tryAgain={ () => {
 						invalidateResolution( 'getEmbedPreview', [ url ] );
 					} }
+					isSelected={ isSelected }
 				/>
 			</View>
 		);
@@ -262,6 +281,7 @@ const EmbedEdit = ( props ) => {
 					icon={ icon }
 					label={ label }
 					insertBlocksAfter={ insertBlocksAfter }
+					clientId={ clientId }
 				/>
 			</View>
 		</>

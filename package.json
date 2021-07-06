@@ -1,6 +1,6 @@
 {
 	"name": "gutenberg",
-	"version": "10.9.2",
+	"version": "11.0.0-rc.1",
 	"private": true,
 	"description": "A new WordPress editor experience.",
 	"author": "The WordPress Contributors",
@@ -23,6 +23,7 @@
 	},
 	"dependencies": {
 		"@wordpress/a11y": "file:packages/a11y",
+		"@wordpress/admin-manifest": "file:packages/admin-manifest",
 		"@wordpress/annotations": "file:packages/annotations",
 		"@wordpress/api-fetch": "file:packages/api-fetch",
 		"@wordpress/autop": "file:packages/autop",
@@ -172,7 +173,7 @@
 		"execa": "4.0.2",
 		"fast-glob": "2.2.7",
 		"glob": "7.1.2",
-		"husky": "6.0.0",
+		"husky": "7.0.0",
 		"inquirer": "7.1.0",
 		"jest": "26.6.3",
 		"jest-junit": "11.0.0",
